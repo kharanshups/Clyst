@@ -3009,9 +3009,7 @@ if __name__ == "__main__":
             print("✅ Database connection test successful")
 
         # Run the app
-        port = int(os.getenv('PORT', 5000))
-        print(f"🚀 Starting app on port {port}")
-        app.run(host='127.0.0.1', port=port)
+        app.run(port=3000)
     except Exception as e:
         print(f"❌ Error starting app: {e}")
         db.session.rollback()  # Rollback any failed transactions
