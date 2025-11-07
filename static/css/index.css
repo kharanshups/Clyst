@@ -186,7 +186,7 @@ h1 {
 .post-description {
 	margin: 0 0 4px 0;
 	color: var(--muted);
-	line-height: 1;
+	line-height: 1.6;
 }
 .post-info {
 	display: flex;
@@ -338,4 +338,34 @@ button:hover {
 	.post-image {
 		justify-content: center;
 	}
+}
+
+/* Speaker button styles */
+.speaker-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.speaker-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.speaker-btn.playing {
+    color: #007bff;
+    background: rgba(0, 123, 255, 0.1);
+}
+
+.comment-speaker {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
 }

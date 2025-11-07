@@ -111,28 +111,12 @@
             <h1 class="product-title">{{ product.title }}</h1>
           <div class="item-desc">{{ product.description|safe }}</div>
             <div class="product-price">Rs.{{ product.price }}
-            <button
-              class="btn icon say-aloud-btn"
-              title="Say Aloud"
-              type="button"
-              data-title="{{ product.title|e }}"
-              data-artist="{{ product.artist.name|e }}"
-              data-price="{{ product.price|string|e }}"
-              data-description="{{ product.description|default('No description available')|e }}"
-              onclick="sayAloudFromEl(this)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="#000000"
-                viewBox="0 0 256 256"
-              >
-                <path
-                  d="M168,32V224a8,8,0,0,1-12.91,6.31L85.25,176H40a16,16,0,0,1-16-16V96A16,16,0,0,1,40,80H85.25l69.84-54.31A8,8,0,0,1,168,32Zm32,64a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V104A8,8,0,0,0,200,96Zm32-16a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V88A8,8,0,0,0,232,80Z"
-                ></path>
-              </svg>
-            </button></div>
+              <button class="speaker-btn" onclick="toggleProductSpeech(this, '{{ product.title|e }}', '{{ product.artist.name|e }}', '{{ product.price }}', '{{ (product.description | default('No description available') | striptags)|e }}')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+              </button>
+            </div>
             <div class="product-rating" title="Average rating">
               {% set avg = (product.avg_rating or 0) %}
               {% for i in range(1,6) %}
@@ -371,28 +355,11 @@
             </div>
             {% endif %}
             <p class="comment-p">{{ comment.content }}</p>
-            <div class="icon-set">
-              <button
-                class="say-aloud-btn"
-                title="Say Aloud"
-                type="button"
-                data-comment="{{ comment.content|e }}"
-                data-author="{{ comment.artist.name|e if comment.artist.name else '' }}"
-                onclick="sayCommentFromEl(this)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
-                  fill="#000000"
-                  viewBox="0 0 256 256"
-                >
-                  <path
-                    d="M168,32V224a8,8,0,0,1-12.91,6.31L85.25,176H40a16,16,0,0,1-16-16V96A16,16,0,0,1,40,80H85.25l69.84-54.31A8,8,0,0,1,168,32Zm32,64a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V104A8,8,0,0,0,200,96Zm32-16a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V88A8,8,0,0,0,232,80Z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+            <button class="speaker-btn comment-speaker" onclick="toggleCommentSpeech(this, '{{ comment.content|e }}', '{{ comment.artist.name|e }}')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+            </button>
 
           </div>
           {% endfor %} 
@@ -452,10 +419,70 @@
         );
       }
 
-      function sayAloud(text) {
-        const message = new SpeechSynthesisUtterance();
-        message.text = `The title of the artwork is ${text.title}. It is created by ${text.artist}. The price of the artwork is Rs.${text.price}. The description says it is ${text.description}.`;
-        window.speechSynthesis.speak(message); // Start speaking
+      // Speech synthesis variables
+      let currentUtterance = null;
+      let isPlaying = false;
+
+      // Toggle speech for products
+      function toggleProductSpeech(button, title, artist, price, description) {
+        if (isPlaying && currentUtterance) {
+          // Stop speech
+          speechSynthesis.cancel();
+          isPlaying = false;
+          currentUtterance = null;
+          button.classList.remove('playing');
+        } else {
+          // Stop any existing speech first
+          speechSynthesis.cancel();
+          
+          // Start new speech
+          const textToSpeak = "Product: " + title + " by " + artist + ". Price: Rs." + price + ". " + description;
+          currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+          
+          currentUtterance.onstart = function() {
+            isPlaying = true;
+            button.classList.add('playing');
+          };
+          
+          currentUtterance.onend = function() {
+            isPlaying = false;
+            currentUtterance = null;
+            button.classList.remove('playing');
+          };
+          
+          speechSynthesis.speak(currentUtterance);
+        }
+      }
+
+      // Toggle speech for comments
+      function toggleCommentSpeech(button, commentText, userName) {
+        if (isPlaying && currentUtterance) {
+          // Stop speech
+          speechSynthesis.cancel();
+          isPlaying = false;
+          currentUtterance = null;
+          button.classList.remove('playing');
+        } else {
+          // Stop any existing speech first
+          speechSynthesis.cancel();
+          
+          // Start new speech
+          const textToSpeak = "Comment by " + userName + ". " + commentText;
+          currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+          
+          currentUtterance.onstart = function() {
+            isPlaying = true;
+            button.classList.add('playing');
+          };
+          
+          currentUtterance.onend = function() {
+            isPlaying = false;
+            currentUtterance = null;
+            button.classList.remove('playing');
+          };
+          
+          speechSynthesis.speak(currentUtterance);
+        }
       }
 
       async function copyToClipboard(textToCopy) {
@@ -465,26 +492,6 @@
         } catch (err) {
           alert("Failed to copy text: " + err);
         }
-      }
-      function sayAloudFromEl(el) {
-        const title = el.getAttribute("data-title") || "";
-        const artist = el.getAttribute("data-artist") || "";
-        const price = el.getAttribute("data-price") || "";
-        const description = el.getAttribute("data-description") || "";
-        const message = new SpeechSynthesisUtterance();
-        message.text = `The title of the artwork is ${title}. It is created by ${artist}. The price of the artwork is Rs.${price}. The description says: ${description}.`;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(message);
-      }
-      // Speak a specific comment provided by data attributes on the element
-      function sayCommentFromEl(el) {
-        const text = el.getAttribute("data-comment") || "";
-        const author = el.getAttribute("data-author") || "";
-        if (!text) return;
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = author ? `${author} says: ${text}` : text;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(msg);
       }
 
       // Cart functionality

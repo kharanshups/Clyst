@@ -136,45 +136,14 @@
                   {% endif %} {% endfor %}
                 </div>
                 <span class="rating-text"
-                  >{{ artisan_rating.avg_rating }} / 5.0 ({{
-                  artisan_rating.total_reviews }} reviews across {{
-                  artisan_rating.total_products }} products)</span
+                  >{{ artisan_rating.avg_rating }}</span
                 >
               </div>
               {% endif %}
 
               <div class="profile-bio">
                 <button class="btn contact-btn" onclick="openContactModal()">Contact Info</button>
-                {% if profile_user %} {% if profile_user.location %}
-                <p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 2c-4.41 0-8 3.59-8 8-.03 6.44 7.12 11.6 7.42 11.82.17.12.38.19.58.19s.41-.06.58-.19c.3-.22 7.45-5.37 7.42-11.82 0-4.41-3.59-8-8-8m0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4"
-                    ></path></svg
-                  >{{ profile_user.location }}
-                </p>
-                {% endif %} {% else %} {% if current_user.location %}
-                <p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 2c-4.41 0-8 3.59-8 8-.03 6.44 7.12 11.6 7.42 11.82.17.12.38.19.58.19s.41-.06.58-.19c.3-.22 7.45-5.37 7.42-11.82 0-4.41-3.59-8-8-8m0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4"
-                    ></path>
-                  </svg>
-                  {{ current_user.location }}
-                </p>
-                {% endif %} {% endif %}
+
               </div>
             </div>
 
@@ -590,11 +559,41 @@
         </div>
         <div class="modal-body">
           {% if profile_user %}
-            <p><strong>Email:</strong> {{ profile_user.email }}</p>
-            <p><strong>Phone:</strong> {{ profile_user.phone or 'Not provided' }}</p>
+            <div class="contact-item">
+              <p><strong>Email:</strong> <span id="email-text">{{ profile_user.email }}</span></p>
+              <button class="copy-btn" onclick="copyToClipboard('{{ profile_user.email }}', this)" title="Copy Email">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+              </button>
+            </div>
+            <div class="contact-item">
+              <p><strong>Phone:</strong> <span id="phone-text">{{ profile_user.phone or 'Not provided' }}</span></p>
+              {% if profile_user.phone %}
+              <button class="copy-btn" onclick="copyToClipboard('{{ profile_user.phone }}', this)" title="Copy Phone">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+              </button>
+              {% endif %}
+            </div>
+            <div class="contact-item">
+              <p><strong>Location:</strong> <span id="location-text">{{ profile_user.location or 'Not provided' }}</span></p>
+            </div>
           {% else %}
-            <p><strong>Email:</strong> {{ current_user.email }}</p>
-            <p><strong>Phone:</strong> {{ current_user.phone or 'Not provided' }}</p>
+            <div class="contact-item">
+              <p><strong>Email:</strong> <span id="email-text">{{ current_user.email }}</span></p>
+              <button class="copy-btn" onclick="copyToClipboard('{{ current_user.email }}', this)" title="Copy Email">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+              </button>
+            </div>
+            <div class="contact-item">
+              <p><strong>Phone:</strong> <span id="phone-text">{{ current_user.phone or 'Not provided' }}</span></p>
+              {% if current_user.phone %}
+              <button class="copy-btn" onclick="copyToClipboard('{{ current_user.phone }}', this)" title="Copy Phone">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+              </button>
+              {% endif %}
+            </div>
+            <div class="contact-item">
+              <p><strong>Location:</strong> <span id="location-text">{{ current_user.location or 'Not provided' }}</span></p>
+            </div>
           {% endif %}
         </div>
       </div>
@@ -719,10 +718,23 @@
             sayAloud(text, button);
           }
 
-          async function copyToClipboard(textToCopy) {
+          async function copyToClipboard(textToCopy, button) {
             try {
               await navigator.clipboard.writeText(textToCopy);
-              alert("Text copied to clipboard");
+              
+              const originalIcon = button.innerHTML;
+              const originalTitle = button.title;
+
+              button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path></svg>';
+              button.title = "Copied!";
+              button.disabled = true;
+
+              setTimeout(() => {
+                button.innerHTML = originalIcon;
+                button.title = originalTitle;
+                button.disabled = false;
+              }, 2000);
+
             } catch (err) {
               alert("Failed to copy text: " + err);
             }

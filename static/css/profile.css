@@ -81,7 +81,7 @@ svg {
 .artisan-rating {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	gap: 10px;
 	margin-top: 12px;
 	margin-bottom: 8px;
@@ -771,6 +771,37 @@ button {
   width: 24px;
   height: 24px;
   fill: currentColor;
+}
+
+/* Contact Item and Copy Button */
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.copy-btn:hover {
+  color: var(--text);
+}
+
+.copy-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.copy-btn:disabled {
+  cursor: default;
+  color: var(--accent);
 }
 
 /* Responsive */

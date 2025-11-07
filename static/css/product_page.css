@@ -295,9 +295,7 @@ h1 {
 	justify-content: space-between;
 }
 
-.say-aloud-btn {
-	border-radius: 0.2em;
-}
+
 
 /* ================================
    TRANSLATE BUTTON
@@ -336,19 +334,7 @@ h1 {
 	fill: light-dark(#4f4f4f, #bababa);
 	color: light-dark(#4f4f4f, #bababa);
 }
-.say-aloud-btn {
-	width: 24px;
-	height: 24px;
-	padding: 0;
-	background: none;
-}
-.say-aloud-btn svg {
-	width: 24px;
-}
-.say-aloud-btn:hover {
-	background: none;
-	transform: scale(1.1);
-}
+
 .btn-delete {
 	border: 1px solid #b52515;
 	color: #b52515;
@@ -827,4 +813,37 @@ input:focus-visible {
 	.product-info {
 		padding: 20px;
 	}
+}
+
+/* Speaker button styles */
+.speaker-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+}
+
+.speaker-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.speaker-btn.playing {
+    color: #007bff;
+    background: rgba(0, 123, 255, 0.1);
+}
+
+.comment-speaker {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    margin-left: 0;
+    margin-top: 8px;
 }

@@ -191,33 +191,7 @@
 	gap: 8px;
 }
 
-/* ================================
-   SAY ALOUD & SHARE BUTTONS
-   ================================ */
-.say-aloud-btn {
-	padding: 0;
-	width: 40px;
-	height: 40px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	cursor: pointer;
-	font-size: 16px;
-	fill: var(--text);
-	transition: all 0.3s ease;
-}
 
-.say-aloud-btn:hover {
-	background: var(--accent);
-	border-color: var(--accent);
-	fill: var(--card);
-	transform: scale(1.1);
-}
-
-.say-aloud-btn:hover svg {
-	fill: var(--card);
-}
 
 .product-card .delete-btn {
 	display: flex;
